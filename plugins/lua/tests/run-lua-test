@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# TODO: Handle most of these
+while true ; do
+	case "$1" in
+	--test-name)
+		SCRIPT_NAME=$(realpath "./$2"); shift 2;;
+	--log-file)
+		LOG_FILE=$2; shift 2;;
+	--trs-file)
+		TRS_FILE=$2; shift 2;;
+	--expect-failure)
+		EXPECT_FAILURE=$2; shift 2;;
+	--enable-hard-errors)
+		HARD_ERRORS=$2; shift 2;;
+	--color-tests)
+		COLOR_TESTS=$2; shift 2;;
+	*)
+		break;;
+	esac
+done
+
+COMMAND="/load ./.libs/lua.so 1\n/lua load $SCRIPT_NAME\n/lua exec os.exit(2)"
+echo -e "$COMMAND" | hexchat-text --cfgdir=/dev/null --no-plugins > $LOG_FILE
+if [ $? -eq 0 ]; then
+	echo ":test-result: PASS" > $TRS_FILE
+else
+	echo ":test-result: FAIL" > $TRS_FILE
+fi

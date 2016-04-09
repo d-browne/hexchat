@@ -61,6 +61,8 @@ stamp-h1
 *.po~
 *.pot
 *.patch
+*.log
+*.trs
 tags
 src/**/*.plist
 # Win32 generated files
